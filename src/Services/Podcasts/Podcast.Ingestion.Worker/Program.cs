@@ -3,13 +3,9 @@ var host = Host.CreateDefaultBuilder(args)
     {
         services.AddDbContext<PodcastDbContext>(options =>
         {
-            options.UseSqlServer(
+            options.UseMySql(
                 hostContext.Configuration.GetConnectionString("PodcastDb"),
-                builder =>
-                {
-                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-                    builder.CommandTimeout(10);
-                }
+                new MySqlServerVersion(new Version(8, 0, 28))
             );
         });
         var feedQueueClient = new QueueClient(hostContext.Configuration.GetConnectionString("FeedQueue"), "feed-queue");

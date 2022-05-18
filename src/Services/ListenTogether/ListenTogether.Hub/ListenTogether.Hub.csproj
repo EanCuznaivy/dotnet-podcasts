@@ -15,7 +15,6 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="3.6.0" />
 		<PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" Version="3.6.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
@@ -34,6 +33,10 @@
 		<ProjectReference Include="..\ListenTogether.Application\ListenTogether.Application.csproj" />
 		<ProjectReference Include="..\ListenTogether.Domain\ListenTogether.Domain.csproj" />
 		<ProjectReference Include="..\ListenTogether.Infrastructure\ListenTogether.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Migrations" />
 	</ItemGroup>
 
 </Project>

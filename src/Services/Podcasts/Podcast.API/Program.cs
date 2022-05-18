@@ -1,15 +1,20 @@
 using Azure.Storage.Queues;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Podcast.API.Controllers;
 using Podcast.API.Models;
 using Podcast.Infrastructure.Data;
 using Podcast.Infrastructure.Http.Feeds;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("PodcastDb");
-builder.Services.AddSqlServer<PodcastDbContext>(connectionString);
+builder.Services.AddDbContext<PodcastDbContext>(options =>
+{
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("PodcastDb"),
+        new MySqlServerVersion(new Version(8, 0, 28)),
+        b => b.MigrationsAssembly("Podcast.API")
+    );
+});
 
 var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue");
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));

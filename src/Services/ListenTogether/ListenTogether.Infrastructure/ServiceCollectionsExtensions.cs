@@ -1,6 +1,7 @@
 ﻿using ListenTogether.Application.Interfaces;
 using ListenTogether.Infrastructure.Data;
 using ListenTogether.Infrastructure.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,8 +11,14 @@ namespace ListenTogether.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("ListenTogetherDb");
-            serviceCollection.AddSqlServer<ListenTogetherDbContext>(connectionString);
+            serviceCollection.AddDbContext<ListenTogetherDbContext>(options =>
+            {
+                options.UseMySql(
+                    configuration.GetConnectionString("ListenTogetherDb"),
+                    new MySqlServerVersion(new Version(8, 0, 28)),
+                    b => b.MigrationsAssembly("ListenTogether.Hub")
+                );
+            });
             serviceCollection.AddScoped<IApplicationDbContext, ListenTogetherDbContext>();
             serviceCollection.AddHttpClient<IEpisodesClient, EpisodesHttpClient>(opt =>
             {

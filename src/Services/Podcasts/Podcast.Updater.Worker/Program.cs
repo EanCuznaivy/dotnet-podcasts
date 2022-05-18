@@ -7,13 +7,9 @@ var host = Host.CreateDefaultBuilder(args)
         services
             .AddDbContext<PodcastDbContext>(options =>
             {
-                options.UseSqlServer(
+                options.UseMySql(
                     hostContext.Configuration.GetConnectionString("PodcastDb"),
-                    builder =>
-                    {
-                        builder.EnableRetryOnFailure(10, TimeSpan.FromSeconds(60), null);
-                        builder.CommandTimeout(30);
-                    }
+                    new MySqlServerVersion(new Version(8, 0, 28))
                 );
             })
             .AddTransient<IPodcastUpdateHandler, PodcastUpdateHandler>()
